@@ -2,14 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes opacityIn {
+  0%{
+    display: none;
+    opacity: 0%;
+  }
+  100%{
+    display: flex;
+    opacity: 100%;
+  }
+}
+
+@keyframes opacityOut {
+  0%{
+    display: flex;
+    opacity: 100%;
+  }
+  100%{
+    display: none;
+    opacity: 0%;
+  }
+}
+
 :root {
   --background-color: white;
   --text-color: #27272a;
   --border-color: white;
   --fill-button-color: #27272a;
   --fill-text-color: white;
-  --searchbar-color: #d5d3d8;
+  --searchbar-color: #dddbe0;
   --searchbar-text: rgb(116, 116, 116);
+  --gold: #F29000;
 }
 
 .dark {
@@ -20,6 +43,7 @@
   --fill-text-color: #0a090d;
   --searchbar-color: #252525;
   --searchbar-text: rgb(187, 187, 187);
+  --gold: #e0ac00;
 }
 
 body {
@@ -31,9 +55,38 @@ body {
     background-color: var(--background-color)
   }
 
+  .product {
+    border-color: #27272a;
+    background-color: var(--background-color)
+  }
+
   .fillButton{
     background-color: var(--fill-button-color);
     color: var(--fill-text-color)
+  }
+
+  .bestseller{
+    border-color: var(--gold);
+    border-width: 2px;
+  }
+
+  .bestsellerbg{
+    background-color: var(--gold)
+  }
+
+  .filter{
+    background-color: var(--searchbar-color);
+  }
+
+  .filterChooser{
+    animation: opacityIn 0.1s ease-in;
+    background-color: var(--searchbar-color);
+    z-index: 3;
+  }
+
+  .filterChooserHidden{
+    display: none;
+    animation: opacityOut 0.1s ease-in;
   }
 
   .searchBar{
@@ -42,7 +95,19 @@ body {
     color: var(--searchbar-text);
   }
 
-  form {
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    appearance: none;
+  }
+
+  .no-spinner {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .formR {
     display: flex;
     flex-direction: column;
     gap: 1rem;

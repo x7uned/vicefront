@@ -51,8 +51,7 @@ const SignUpForm = () => {
             const fetch = await dispatch(fetchSignUp(params))
 
             if (fetch?.payload.success && fetch?.payload.email) {
-                localStorage.setItem('emailForVerification', fetch?.payload.email)
-                router.push('/verification')
+                router.push(`/verification?email=${fetch?.payload.email}`)
             }
         } catch (error) {
             console.error('Sign up failed:', error);
@@ -77,7 +76,7 @@ const SignUpForm = () => {
                     </button>
                 </div>
                 <hr className="border-[#252525] h-[1px] w-full" />
-                <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full formR">
                     <div>
                         <label htmlFor="username">Username:</label>
                         <input id="username" {...register('username')} className="w-full p-2 border rounded" />

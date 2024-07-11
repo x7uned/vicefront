@@ -9,8 +9,6 @@ import { FaGoogle, FaGithub, FaEyeSlash, FaEye  } from "react-icons/fa";
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { fetchSignIn } from '@/redux/user.slice';
-import { useAppDispatch } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 
 const kanit = Kanit({ subsets: ["latin"], weight: ['500'] });
@@ -27,7 +25,6 @@ export interface SignInInterface {
 
 const SignInForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const dispatch = useAppDispatch();
     const router = useRouter();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -39,23 +36,14 @@ const SignInForm = () => {
             const {email, password} = data;
 
             const result = await signIn("credentials", {
-                        redirect: false,
-                        email,
-                        password
-
+                redirect: false,
+                email,
+                password
             });
 
-            // const fetch: any = await dispatch(fetchSignIn(params))
-
-            // if (fetch?.payload.success && fetch?.payload.access_token) {
-            //     const fetchParams = fetch?.payload;
-            //     localStorage.setItem('token', fetch?.payload.access_token)
-            //     const result = await signIn("credentials", {
-            //         redirect: false,
-            //         fetchParams
-            //       });
-            //     router.push('/')
-            // }
+            if (result?.ok) {
+                router.push('/')
+            }
         } catch (error) {
             console.error('Sign up failed:', error);
         }
@@ -79,7 +67,7 @@ const SignInForm = () => {
                     </button>
                 </div>
                 <hr className="border-[#252525] h-[1px] w-full" />
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className='formR' onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="email">Email:</label>
                         <input id="email" {...register('email')} />

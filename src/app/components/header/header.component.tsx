@@ -29,7 +29,7 @@ const HeaderComponent = () => {
                 <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
                     {theme === 'dark' ? <MdOutlineDarkMode size="25px" /> : <MdLightMode size="25px" />}
                 </button>
-                <button>
+                <button onClick={() => {console.log(session)}}>
                     <MdOutlineShoppingCart size="25px" />
                 </button>
                 {session && session.user ? <FaRegUserCircle onClick={() => {signOut()}} size="25px" className='cursor-pointer' /> : <Link href="/signin"><HiOutlineLogin size="25px" className='cursor-pointer' /></Link>}

@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '@/redux/store';
 import { fetchConfirm } from '@/redux/user.slice';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const kanit = Kanit({ subsets: ["latin"], weight: ['500'] });
 
@@ -20,30 +20,23 @@ interface confirmFormInterface {
 }
 
 const VerificationForm = () => {
-  const [emailVerification, setEmailVerification] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email');
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
 });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const email = localStorage.getItem('emailForVerification');
-      setEmailVerification(email);
-    }
-  }, []);
-
   const onSubmit = async (data: confirmFormInterface) => {
     try {
     const params = {
-      email: emailVerification || '',
+      email: email || '',
       confirmationCode: data.confirmCode || '',
     }
     const fetch = await dispatch(fetchConfirm(params))
 
     if (fetch?.payload.access_token && fetch?.payload.success) {
-      localStorage.setItem('token', fetch.payload.access_token)
       router.push('/')
     }
     } catch (error) {
@@ -55,7 +48,7 @@ const VerificationForm = () => {
     <div className='flex justify-center items-center w-full h-screen'>
       <div className="flex flex-col gap-3">
         <p className={`text-2xl ${kanit.className}`}>Verify your account</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className='formR' onSubmit={handleSubmit(onSubmit)}>
           <div>
             <input id="confirmCode" {...register('confirmCode')} className="w-full p-2 border rounded" />
             {errors.confirmCode && <span>{errors.confirmCode.message}</span>}
