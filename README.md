@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Vice Frontend
+
+Vice Frontend is a web application built with [Next.js](https://nextjs.org/) and [React](https://reactjs.org/) using TypeScript for managing and displaying data.
+
+## Technologies
+
+The project uses the following technologies:
+
+- [Next.js](https://nextjs.org/) — a React framework with support for server-side rendering and static generation.
+- [React](https://reactjs.org/) — a library for building user interfaces.
+- [TypeScript](https://www.typescriptlang.org/) — a programming language for static typing in JavaScript.
+- [react-hook-form](https://react-hook-form.com/) — a library for form management.
+- [Tailwind CSS](https://tailwindcss.com/) — a utility-first CSS framework for building responsive interfaces.
+- [Redux Toolkit](https://redux-toolkit.js.org/) — a toolset for efficient Redux development.
+- [Axios](https://axios-http.com/) — an HTTP client for making requests.
+- [NextAuth.js](https://next-auth.js.org/) — a library for authentication in Next.js.
+- [Yup](https://github.com/jquense/yup) — a schema validation library.
 
 ## Getting Started
 
-First, run the development server:
+To install and run the project, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository:
+   
+   git clone https://github.com/x7uned/vice-front.git
+   
+2.Navigate to the project directory:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  cd vice-front
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3.Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  npm install
 
-## Learn More
+Or if you use Yarn:
 
-To learn more about Next.js, take a look at the following resources:
+  yarn install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4.Create a .env file in the root directory and add the necessary environment variables. Example .env file:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  AUTH_GOOGLE_ID=
+  AUTH_GOOGLE_SECRET=
+  AUTH_SECRET=
+  JWT_SECRET=
 
-## Deploy on Vercel
+5.Start the development server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  Or if you use Yarn:
+
+  yarn dev
+
+6.Open your browser and go to http://localhost:3000 to see the application in action. GL <3
