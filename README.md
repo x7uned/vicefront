@@ -24,11 +24,11 @@ To install and run the project, follow these steps:
    
    git clone https://github.com/x7uned/vice-front.git
    
-2.Navigate to the project directory:
+2. Navigate to the project directory:
 
   cd vice-front
 
-3.Install dependencies:
+3. Install dependencies:
 
   npm install
 
@@ -36,14 +36,14 @@ Or if you use Yarn:
 
   yarn install
 
-4.Create a .env file in the root directory and add the necessary environment variables. Example .env file:
+4. Create a .env file in the root directory and add the necessary environment variables. Example .env file:
 
   AUTH_GOOGLE_ID=
   AUTH_GOOGLE_SECRET=
   AUTH_SECRET=
   JWT_SECRET=
 
-5.Start the development server:
+5. Start the development server:
 
   npm run dev
 
@@ -51,4 +51,4 @@ Or if you use Yarn:
 
   yarn dev
 
-6.Open your browser and go to http://localhost:3000 to see the application in action. GL <3
+6. Open your browser and go to http://localhost:3000 to see the application in action. GL <3
