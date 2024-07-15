@@ -2,6 +2,10 @@
 
 Vice Frontend is a web application built with [Next.js](https://nextjs.org/) and [React](https://reactjs.org/) using TypeScript for managing and displaying data.
 
+## Backend
+
+You can also check out [my version](https://github.com/x7uned/vicebackend) of the backend for this site
+
 ## Technologies
 
 The project uses the following technologies:
