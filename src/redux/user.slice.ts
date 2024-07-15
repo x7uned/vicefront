@@ -46,6 +46,22 @@ export const fetchSignUp = createAsyncThunk(
   }
 );
 
+interface fetchFindUserInterface {
+  id: string;
+}
+
+export const fetchFindUser = createAsyncThunk(
+  'user/fetchFindUser',
+  async (data: fetchFindUserInterface) => {
+    try {
+      const response = await axios.get(`auth/findUser?id=${data.id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Something went wrong #findUser', error);
+    }
+  }
+)
+
 export const fetchSignIn = createAsyncThunk(
   'user/fetchSignIn',
   async (userData: SignInFetch) => {

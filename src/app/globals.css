@@ -26,6 +26,7 @@
 
 :root {
   --background-color: white;
+  --cart-color: white;
   --text-color: #27272a;
   --border-color: white;
   --fill-button-color: #27272a;
@@ -37,6 +38,7 @@
 
 .dark {
   --background-color: #0a090d;
+  --cart-color: #09090B;
   --text-color: white;
   --border-color: #211e2b;
   --fill-button-color: white;
@@ -46,9 +48,40 @@
   --gold: #e0ac00;
 }
 
+@keyframes zooms {
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 100%;
+    transform: scale(1);
+  }
+}
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
+
+  .cartMenu{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    padding: 36px;
+    position: fixed;
+    width: 600px;
+    height: 100vh;
+    background-color: var(--cart-color);
+    -webkit-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+    right: -630px;
+    transition: right 0.5s ease;
+  }
+
+  .cartMenu.show{
+    right: 0;
+  }
   
   .header {
     border-color: var(--border-color);
@@ -56,6 +89,12 @@ body {
   }
 
   .product {
+    border-color: #27272a;
+    background-color: var(--background-color)
+  }
+
+  .animZoom{
+    animation: zooms 0.2s;
     border-color: #27272a;
     background-color: var(--background-color)
   }

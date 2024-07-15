@@ -35,6 +35,19 @@ export const fetchFindPage = createAsyncThunk(
   }
 );
 
+export const fetchGetCategories = createAsyncThunk(
+  'products/fetchGetCategories',
+  async () => {
+    try {
+      const response = await axios.get(`products/categories`);
+      return response.data;
+    } catch (error) {
+      console.error('Something went wrong', error);
+      throw error;
+    }
+  }
+);
+
 export const fetchGetBrands = createAsyncThunk(
   'products/fetchGetBrands',
   async () => {

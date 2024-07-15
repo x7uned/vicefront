@@ -1,56 +1,63 @@
+"use client"
+
+import { fetchGetCategories } from "@/redux/products.slice";
+import { useAppDispatch } from "@/redux/store";
 import { Kanit } from "next/font/google";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { TbCategory } from "react-icons/tb";
 
 const kanit = Kanit({ subsets: ["latin"], weight: ['500'] });
 const kanitMini = Kanit({ subsets: ["latin"], weight: ['300'] });
 
-interface Product {
+interface Category {
     title: string,
-    text: string,
+    subtitle: string,
     quantity: number
 }
 
-const products: Product[] = [
-    {
-        title: 'Desktop',
-        text: 'Feel the game 100 percent',
-        quantity: 13,
-    },
-    {
-        title: 'Console',
-        text: 'Show your best',
-        quantity: 9
-    },
-    {
-      title: 'Furniture',
-      text: 'Play in comfort',
-      quantity: 2
-  },
-    {
-        title: 'Another',
-        text: 'Complete your game',
-        quantity: 4
-    }
-]
+const Categories = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const dispatch = useAppDispatch();
 
-const ProductsCategory = () => {
+  const fetchCategories = async () => {
+    const fetch = await dispatch(fetchGetCategories());
+    setCategories(fetch.payload.categories)
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
   return (
     <div className="flex gap-3 mt-16">
-      {products.map((product, index) => (
-        <Link key={index} href={`/catalog?c=${product.title.toLowerCase()}`}>
-          <div  className={`product cursor-pointer flex items-center flex-col p-6 border-[1px] rounded-xl w-64 h-36 ${kanitMini.className}`}>
-            <p className={`${kanit.className} text-xl w-full flex justify-center text-center`}>{product.title}</p>
-            <p className={`w-full mt-2 flex justify-center text-center text-gray-400`}>{product.text}</p>
+      {(categories.length === 0 ? (
+        [...Array(4)].map((_, index) => (
+          <div key={index} className="product cursor-pointer flex items-center flex-col p-6 border-[1px] rounded-xl w-64 h-36 animate-pulse">
+            <p className="bg-gray-300 h-6 w-full rounded mb-2"></p>
+            <p className="bg-gray-300 h-4 w-full rounded mt-2"></p>
             <div className="flex w-1/2 justify-around items-center mt-3">
-              <TbCategory size={"20px"}/>
-              <p>{product.quantity} products</p>
+              <div className="bg-gray-300 h-5 w-5 rounded-full"></div>
+              <p className="bg-gray-300 h-4 w-24 rounded"></p>
             </div>
           </div>
-        </Link>
-      ))}
+        ))
+      ) : (
+        categories.map((category, index) => (
+          <Link key={index} href={`/catalog?c=${category.title.toLowerCase()}`}>
+            <div  className={`product cursor-pointer flex items-center flex-col p-6 border-[1px] rounded-xl w-64 h-36 ${kanitMini.className}`}>
+              <p className={`${kanit.className} text-xl w-full flex justify-center text-center`}>{category.title}</p>
+              <p className={`w-full mt-2 flex justify-center text-center text-gray-400`}>{category.subtitle}</p>
+              <div className="flex w-1/2 justify-around items-center mt-3">
+                <TbCategory size={"20px"}/>
+                <p>{category.quantity} products</p>
+              </div>
+            </div>
+          </Link>
+        )
+      )))}
     </div>
   );
 }
 
-export default ProductsCategory;
+export default Categories;

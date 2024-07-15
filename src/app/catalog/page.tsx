@@ -91,7 +91,6 @@ const CatalogPage = () => {
     setPage(newPage);
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('page', newPage.toString());
-    setProducts([])
     router.push(`?${newSearchParams.toString()}`);
   };
 
@@ -99,7 +98,6 @@ const CatalogPage = () => {
     setPage(1);
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('s', newSort.toString());
-    setProducts([])
     router.push(`?${newSearchParams.toString()}`);
   };
 
@@ -107,7 +105,6 @@ const CatalogPage = () => {
     setPage(1);
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('b', newBrand);
-    setProducts([])
     router.push(`?${newSearchParams.toString()}`);
   };
 
@@ -116,7 +113,6 @@ const CatalogPage = () => {
     
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('c', newCategory);
-    setProducts([])
     router.push(`?${newSearchParams.toString()}`);
   };
 

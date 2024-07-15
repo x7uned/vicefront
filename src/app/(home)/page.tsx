@@ -12,7 +12,7 @@ export default function Home() {
       <div className="flex flex-col gap-20 w-full h-screen items-center">
         <div className="title flex mt-40 flex-col items-center">
           <p className={`text-[80px] ${kanit.className}`}>Improve your gaming</p>
-          <p className={`text-2xl text-[#fdfdfd] ${kanitMini.className}`}>Vice is an online store for all kinds of gaming devices</p>
+          <p className={`text-2xl text-[#95959e] ${kanitMini.className}`}>Vice is an online store for all kinds of gaming devices</p>
           <p className={`text-2xl text-[#95959e] ${kanitMini.className}`}>{`Powered by x7uned <3`}</p>
           <div className={`flex mt-12 w-[95vw] justify-center gap-5 ${kanitMini.className}`}>
             <button className="fillButton rounded-[6px] h-[36px] w-36">
