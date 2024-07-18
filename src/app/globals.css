@@ -38,13 +38,13 @@
 
 .dark {
   --background-color: #0a090d;
-  --cart-color: #09090B;
+  --cart-color: #252525;
   --text-color: white;
   --border-color: #211e2b;
   --fill-button-color: white;
   --fill-text-color: #0a090d;
   --searchbar-color: #252525;
-  --searchbar-text: rgb(187, 187, 187);
+  --searchbar-text: rgb(187, 184, 184);
   --gold: #e0ac00;
 }
 
@@ -67,17 +67,33 @@ body {
     flex-direction: column;
     display: flex;
     align-items: center;
-    padding: 36px;
+    padding-left: 36px;
+    padding-right: 36px;
+    padding-top: 12px;
     position: fixed;
     width: 600px;
-    height: 100vh;
+    height: 60vh;
     background-color: var(--cart-color);
-    -webkit-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.25);
+    margin-top: 20vh;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
     right: -630px;
     transition: right 0.5s ease;
   }
+
+  .hideScroll {
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.hideScroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
 
   .cartMenu.show{
     right: 0;
@@ -93,10 +109,17 @@ body {
     background-color: var(--background-color)
   }
 
-  .animZoom{
-    animation: zooms 0.2s;
+  .profileMenu{
+    opacity: 0%;
+    transition: opacity 0.2s ease-in-out;
     border-color: #27272a;
-    background-color: var(--background-color)
+    background-color: var(--background-color);
+    pointer-events: none;
+  }
+
+  .profileMenu.show{
+    pointer-events: all;
+    opacity: 100%;
   }
 
   .fillButton{
@@ -117,15 +140,24 @@ body {
     background-color: var(--searchbar-color);
   }
 
-  .filterChooser{
-    animation: opacityIn 0.1s ease-in;
-    background-color: var(--searchbar-color);
-    z-index: 3;
+  .unselectable {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
-  .filterChooserHidden{
-    display: none;
-    animation: opacityOut 0.1s ease-in;
+  .filterChooser{
+    background-color: var(--searchbar-color);
+    opacity: 0%;
+    z-index: 3;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .filterChooser.show{
+    pointer-events: all;
+    opacity: 100%;
   }
 
   .searchBar{

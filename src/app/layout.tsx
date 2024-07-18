@@ -2,10 +2,11 @@ import { ThemeProvider } from 'next-themes';
 import { Kanit } from "next/font/google";
 
 import "./globals.css";
-import HeaderComponent from './components/header/header.component';
+import HeaderComponent from './components/header.component';
 import { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { StoreProvider } from '@/redux/store.provider';
+import { CartProvider } from './components/contexts/cart.context';
 
 const kanitMini = Kanit({ subsets: ["latin"], weight: ['300'] });
 
@@ -25,10 +26,12 @@ export default function RootLayout({
         <ThemeProvider attribute="class">
           <SessionProvider>
             <StoreProvider>
-              <div className={kanitMini.className}>
-                <HeaderComponent />
-                {children}
-              </div>
+              <CartProvider>
+                <div className={kanitMini.className}>
+                  <HeaderComponent />
+                  {children}
+                </div>  
+              </CartProvider>
             </StoreProvider>
           </SessionProvider>
         </ThemeProvider>

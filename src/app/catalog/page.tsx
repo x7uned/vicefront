@@ -10,9 +10,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { fetchFindPage, fetchGetBrands } from '@/redux/products.slice';
 import { useAppDispatch } from '@/redux/store';
+import ProductComponent, { Product } from "../components/product.component";
 
 const kanitMini = Kanit({ subsets: ["latin"], weight: ["300"] });
-const kanit = Kanit({ subsets: ["latin"], weight: ["600"] });
 
 interface PriceInterface {
   priceMax: number;
@@ -35,17 +35,6 @@ const schema = yup.object().shape({
       return value > priceMin;
     }),
 });
-
-interface Product {
-  id: string,
-  category: string,
-  title: string,
-  subtitle: string,
-  image: string,
-  brand: string,
-  price: string,
-  bestseller: string
-}
 
 interface FindPageData {
   page:string,
@@ -85,7 +74,7 @@ const CatalogPage = () => {
 
   useEffect(() => {
     fetchPageData();
-  }, [page, category, brand, sort, pricemin, pricemax]);  // Добавлены зависимости pricemin и pricemax
+  }, [page, category, brand, sort, pricemin, pricemax]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -165,25 +154,7 @@ const CatalogPage = () => {
         <div className="flex flex-wrap gap-[12px] justify-between">
   {products.length !== 0 ? (
     products.map((product: Product) => (
-      <div 
-        key={product.id} 
-        className={`flex ${kanit.className} h-[300px] overflow-hidden pb-8 flex-col rounded-lg border-[1px] items-center w-[24%] ${(product.bestseller === 'true') ? 'bestseller' : 'border-[#252525]'}`}
-      >
-        <div className={`flex text-white justify-center text-sm items-center w-full h-[20px] ${(product.bestseller === 'true') ? 'bestsellerbg' : ''}`}>
-          {(product.bestseller === 'true') ? (<p className="tracking-[0.7em]">BESTSELLER</p>) : ''}
-        </div>
-        <div 
-          className="w-full mt-4 h-[120px] bg-center bg-contain bg-no-repeat" 
-          style={{ backgroundImage: `url(${product.image})` }}
-        ></div>
-        <div className="flex w-full mt-4 px-2 justify-center text-center h-8">
-          <p className='flex text-ellipsis overflow-hidden items-center text-[16px] h-12 font-semibold'>{product.title}</p>
-        </div>
-        <div className="flex w-full mt-10 gap-1 px-6 h-8 justify-between">
-          <button className={`fillButton rounded-[6px] px-4 w-[100px] h-full cursor-pointer`}>Buy</button>
-          <p className={`w-[200px] text-end truncate text-xl rounded-[6px] px-4 h-full`}>{product.price}$</p>
-        </div>
-      </div>
+      <ProductComponent product={product} />
     ))
   ) : (
     <div className="flex flex-wrap gap-[12px] justify-between">
@@ -217,8 +188,8 @@ const CatalogPage = () => {
         <Link href="/">
           <AiOutlineHome size="20px" />
         </Link>
-        <p>/</p>
-        <p>Catalog</p>
+        <p className="unselectable">/</p>
+        <p className="unselectable">Catalog</p>
       </div>
       <div className="relative w-1/2 mt-6 flex">
         <AiOutlineSearch className="absolute mt-[2px] top-3 left-3 text-gray-500" size="20px" />
@@ -239,36 +210,34 @@ const CatalogPage = () => {
         </div>
         <div className="w-full">
           <div onClick={() => setShowPriceChooser(!showPriceChooser)} className="filter cursor-pointer w-full h-8 bg-slate-400 relative rounded-lg items-center flex">
-            <p className="w-full flex justify-center">Price</p>
-          </div>
-          {showPriceChooser && (
-            <div className="filterChooser relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36">
-              <form className="flex flex-col justify-around items-center h-full w-full" onSubmit={handleSubmit(onSubmit)}>
-                <label>From</label>
-                <input
-                  type="number"
-                  className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
-                  min="0"
-                  placeholder="0"
-                  defaultValue={pricemin}
-                  {...register("priceMin")}
-                />
-                {errors.priceMin && <p className="text-red-500 text-center">{errors.priceMin.message}</p>}
-                <label>To</label>
-                <input
-                  type="number"
-                  className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
-                  min="0"
-                  defaultValue={pricemax}
-                  placeholder="∞"
-                  {...register("priceMax")}
-                />
-                {errors.priceMax && <p className="text-red-500 text-center line-clamp-3">{errors.priceMax.message}</p>}
-                <p className="cursor-pointer" onClick={() => {resetPriceParams()}}>Reset</p>
-                <button className="p-1 w-2/3 rounded-lg" type="submit">Save</button>
-              </form>
-            </div>
-          )}
+          <p className="w-full unselectable flex justify-center">Price</p>
+        </div>
+        <div className={`${showPriceChooser ? 'filterChooser show' : 'filterChooser'} relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36`}>
+          <form className="flex flex-col justify-around items-center h-full w-full" onSubmit={handleSubmit(onSubmit)}>
+            <label>From</label>
+            <input
+              type="number"
+              className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
+              min="0"
+              placeholder="0"
+              defaultValue={pricemin}
+              {...register("priceMin")}
+            />
+            {errors.priceMin && <p className="text-red-500 text-center">{errors.priceMin.message}</p>}
+            <label>To</label>
+            <input
+              type="number"
+              className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
+              min="0"
+              defaultValue={pricemax}
+              placeholder="∞"
+              {...register("priceMax")}
+            />
+            {errors.priceMax && <p className="text-red-500 text-center line-clamp-3">{errors.priceMax.message}</p>}
+            <p className="cursor-pointer" onClick={() => {resetPriceParams()}}>Reset</p>
+            <button className="p-1 w-2/3 rounded-lg" type="submit">Save</button>
+          </form>
+        </div>
         </div>
         <div className="w-full">
           <select onChange={(event) => handleBrandChange(event.target.value)} defaultValue={brand || "all"} className="filter focus:outline-none text-center no-spinner cursor-pointer h-8 rounded-lg items-center w-full">

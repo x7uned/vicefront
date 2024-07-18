@@ -14,6 +14,7 @@ import Link from "next/link";
 
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Cart from "./cart.component";
 
 const titilium = Titillium_Web({ subsets: ["latin"], weight: ['600'] });
 
@@ -21,18 +22,17 @@ const HeaderComponent = () => {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [profileMenu, setProfileMenu] = useState(false);
-    const [cartMenu, setCartMenu] = useState(false);
     const { data: session } = useSession();
     const router = useRouter();
-    const menuRef = useRef<HTMLDivElement>(null);
+    const profileMenuRef = useRef<HTMLDivElement>(null);
+    const [cartMenu, setCartMenu] = useState(false);
 
     useEffect(() => setMounted(true), []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
                 setProfileMenu(false);
-                setCartMenu(false)
             }
         };
 
@@ -40,7 +40,7 @@ const HeaderComponent = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [menuRef]);
+    }, [profileMenuRef]);
 
     if (!mounted) return null;
 
@@ -58,35 +58,25 @@ const HeaderComponent = () => {
                     {session && session.user ? 
                     <div className="flex justify-center">
                         <FaRegUserCircle onClick={() => {setProfileMenu(!profileMenu)}} size="25px" className='cursor-pointer' />
-                        <div ref={menuRef} style={{display: `${profileMenu ? 'flex' : 'none'}`}} className="py-3 flex-col border-[1px] animZoom text-center items-center rounded-lg z-10 mt-[50px] absolute bg-slate-500 w-[200px]">
-                            <p className="text-sm">{session?.user?.email}</p>
-                            <div className="w-full mt-2 border-t border-[#27272a]"></div>
-                            <div className="flex cursor-pointer pl-8 w-full mt-2 flex-col">
-                                <Link href={`/user/${session.user.id}`}>
-                                    <div className="flex gap-1 items-center">
-                                        <LuUser size="20px" />
-                                        <p className="ml-1 text-[14px]">Show profile</p>
-                                    </div>
-                                </Link>
+                        <div ref={profileMenuRef} className={`${profileMenu ? 'profileMenu show' : 'profileMenu'} py-3 flex-col border text-center items-center rounded-lg absolute bg-slate-500 w-52 mt-12 z-10`}>
+                            <p className="text-sm">{session.user.email}</p>
+                            <div className="w-full mt-2 border-t"></div>
+                            <Link href={`/user/${session.user.id}`} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200">
+                                <LuUser size="20px" />
+                                <p className="text-sm">Show profile</p>
+                            </Link>
+                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                <FaMoneyBillTransfer size="20px" />
+                                <p className="text-sm">Billing</p>
                             </div>
-                            <div className="flex cursor-pointer pl-8 w-full mt-2 flex-col">
-                                <div className="flex gap-1 items-center">
-                                    <FaMoneyBillTransfer size="20px" />
-                                    <p className="ml-1 text-[14px]">Billing</p>
-                                </div>
+                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                <MdOutlineSettings size="20px" />
+                                <p className="text-sm">Settings</p>
                             </div>
-                            <div className="flex cursor-pointer pl-8 w-full mt-2 flex-col">
-                                <div className="flex gap-1 items-center">
-                                    <MdOutlineSettings size="20px" />
-                                    <p className="ml-1 text-[14px]">Settings</p>
-                                </div>
-                            </div>
-                            <div className="w-full mt-2 border-t border-[#27272a]"></div>
-                            <div onClick={() => {signOut(); router.push('/')}} className="flex cursor-pointer pl-8 w-full mt-2 flex-col">
-                                <div className="flex gap-1 items-center">
-                                    <CgLogOut size="20px" />
-                                    <p className="ml-1 text-[14px]">Log out</p>
-                                </div>
+                            <div className="w-full border-t"></div>
+                            <div onClick={() => { signOut(); router.push('/') }} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                <CgLogOut size="20px" />
+                                <p className="text-sm">Log out</p>
                             </div>
                         </div>
                     </div>  
@@ -96,10 +86,7 @@ const HeaderComponent = () => {
                     </Link>}
                 </div>
             </div>
-            <div ref={menuRef} className={cartMenu ? 'cartMenu show' : 'cartMenu'}>
-                <p className="text-2xl">Cart</p>
-                <div className="w-full mt-2 border-t border-[#211e2b]"></div>
-            </div>
+            <Cart cartMenu={cartMenu} setCartMenu={setCartMenu} />
         </>
     )
 }

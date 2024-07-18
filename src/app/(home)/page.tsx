@@ -1,6 +1,6 @@
 import { Kanit } from "next/font/google";
 import Link from "next/link";
-import ProductsCategory from "../components/catalog/products.category";
+import ProductsCategory from "../components/categories.component";
 
 const kanit = Kanit({ subsets: ["latin"], weight: ['500'] });
 const kanitMini = Kanit({ subsets: ["latin"], weight: ['300'] });
