@@ -6,11 +6,12 @@ import { SiPrivatedivision } from "react-icons/si";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useCart } from "../components/contexts/cart.context";
+import { useCart } from "../../components/contexts/cart.context";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { useAppDispatch } from "@/redux/store";
 import { fetchCreateOrder } from "@/redux/orders.slice";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const schema = yup.object().shape({
   firstname: yup.string()
@@ -64,6 +65,7 @@ const OrderPage = () => {
   const router = useRouter();
   const { cart, totalAmount } = useCart();
   const postname = watch('postname', 'meest');
+  const [errorMessage, setErrorMessage] = useState<string>("")
 
   const onSubmit = async (data: OrderFormData) => {
     try {
@@ -75,6 +77,8 @@ const OrderPage = () => {
 
       if (fetchData.payload.success && fetchData.payload.orderId) {
         router.push(`/order/${fetchData.payload.orderId}`)
+      } else if (!fetchData.payload.success && fetchData.payload.message) {
+        setErrorMessage(fetchData.payload.message)
       }
     } catch (error) {
       console.error('Fetch Create Order failed:', error);
@@ -203,13 +207,14 @@ const OrderPage = () => {
                 </div>
               </div>
               <button className='sumbitButton mt-4' type="submit">Confirm order</button>
+              {errorMessage && <span className="mt-2 w-full text-center">{errorMessage}</span>}
             </div>
           </div>
         </form>
       </div>
       <div className="flex flex-col h-1/2 w-2/5">
         <div className="flex items-center gap-4 !flex-row mt-8">
-          <BsArrowUpLeftSquareFill onClick={() => console.log(cart)} size={"34px"} />
+          <BsArrowUpLeftSquareFill size={"34px"} />
           <p className="text-3xl font-bold">Order</p>
         </div>
         {cart.length === 0 ? (
@@ -233,7 +238,7 @@ const OrderPage = () => {
               </div>
             ))}
             <div className="hl"></div>
-            <div className="flex flex-col gap-2 px-36 text-xl">
+            <div className="flex flex-col pb-12 gap-2 px-36 text-xl">
               <div className="flex justify-between">
                 <p>Items:</p>
                 <p>{cart.length}</p>

@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { StoreProvider } from '@/redux/store.provider';
 import { CartProvider } from './components/contexts/cart.context';
+import FooterComponent from './components/footer.component';
 
 const kanitMini = Kanit({ subsets: ["latin"], weight: ['300'] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
                 <div className={kanitMini.className}>
                   <HeaderComponent />
                   {children}
+                  <FooterComponent />
                 </div>  
               </CartProvider>
             </StoreProvider>

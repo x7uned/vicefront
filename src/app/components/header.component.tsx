@@ -55,9 +55,6 @@ const HeaderComponent = () => {
                     <button onClick={() => {setCartMenu(!cartMenu)}}>
                         <MdOutlineShoppingCart size="25px" />
                     </button>
-                    <button onClick={() => {console.log(session)}}>
-                        <MdOutlineShoppingCart size="12px" />
-                    </button>
                     {session && session.user ? 
                     <div className="flex justify-center">
                         <FaRegUserCircle onClick={() => {setProfileMenu(!profileMenu)}} size="25px" className='cursor-pointer' />

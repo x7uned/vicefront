@@ -28,6 +28,7 @@
   --background-color: white;
   --cart-color: white;
   --text-color: #27272a;
+  --text-footer-color: black;
   --border-color: white;
   --horizonalLine-color: #9c9c9c;
   --fill-button-color: #27272a;
@@ -35,12 +36,14 @@
   --searchbar-color: #dddbe0;
   --searchbar-text: rgb(116, 116, 116);
   --gold: #F29000;
+  --footer-bg: #27272a;
 }
 
 .dark {
   --background-color: #0a090d;
   --cart-color: #252525;
   --text-color: white;
+  --text-footer-color: white;
   --border-color: #211e2b;
   --horizonalLine-color: #252525;
   --fill-button-color: white;
@@ -48,6 +51,7 @@
   --searchbar-color: #252525;
   --searchbar-text: rgb(187, 184, 184);
   --gold: #e0ac00;
+  --footer-bg: #252525;
 }
 
 @keyframes zooms {
@@ -88,6 +92,20 @@ body {
 
   .no-scroll {
     overflow: hidden;
+  }
+
+  .footer{
+    color: white;
+    background-color: var(--footer-bg)
+  }
+  
+  .textChangeColor{
+    color: gray;
+    transition: color 0.2s;
+  }
+
+  .textChangeColor:hover{
+    color: white;
   }
 
   .hl{

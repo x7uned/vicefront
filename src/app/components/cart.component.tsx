@@ -88,7 +88,7 @@ const Cart = ({ cartMenu, setCartMenu }: CartProps) => {
                             <p>Total:</p>
                             <p>{totalAmount}$</p>
                         </div>
-                        <button onClick={() => router.push('/neworder')} className='fillButton rounded-2xl px-5 py-2'>Place an order</button>
+                        <button onClick={() => router.push('/order/new')} className='fillButton rounded-2xl px-5 py-2'>Place an order</button>
                     </div>
                 </div>
                 </>
