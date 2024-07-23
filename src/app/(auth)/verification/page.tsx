@@ -23,7 +23,7 @@ const VerificationForm = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  const userId = searchParams.get('userId');
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
 });
@@ -31,7 +31,7 @@ const VerificationForm = () => {
   const onSubmit = async (data: confirmFormInterface) => {
     try {
     const params = {
-      email: email || '',
+      userId: userId || '',
       confirmationCode: data.confirmCode || '',
     }
     const fetch = await dispatch(fetchConfirm(params))

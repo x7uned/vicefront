@@ -29,6 +29,7 @@
   --cart-color: white;
   --text-color: #27272a;
   --border-color: white;
+  --horizonalLine-color: #9c9c9c;
   --fill-button-color: #27272a;
   --fill-text-color: white;
   --searchbar-color: #dddbe0;
@@ -41,6 +42,7 @@
   --cart-color: #252525;
   --text-color: white;
   --border-color: #211e2b;
+  --horizonalLine-color: #252525;
   --fill-button-color: white;
   --fill-text-color: #0a090d;
   --searchbar-color: #252525;
@@ -84,16 +86,26 @@ body {
     transition: right 0.5s ease;
   }
 
+  .no-scroll {
+    overflow: hidden;
+  }
+
+  .hl{
+    width: 100%;
+    height: 1px;
+    background-color: var(--horizonalLine-color);
+  }
+
   .hideScroll {
     overflow: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
+  }
 
-.hideScroll::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
+  .hideScroll::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+  }
 
   .cartMenu.show{
     right: 0;
@@ -116,6 +128,10 @@ body {
     background-color: var(--background-color);
     pointer-events: none;
   }
+
+  .loading2 span {
+    background-color: var(--text-color);
+}
 
   .profileMenu.show{
     pointer-events: all;
@@ -198,6 +214,12 @@ body {
     }
     
     input {
+      padding: 0.5rem;
+      border: 1px solid #252525;
+      border-radius: 4px;
+    }
+
+    select {
       padding: 0.5rem;
       border: 1px solid #252525;
       border-radius: 4px;

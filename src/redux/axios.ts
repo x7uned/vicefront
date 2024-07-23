@@ -1,19 +1,23 @@
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
-const instance = axios.create({
-    baseURL: "http://localhost:4444/",
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:4444',
 });
 
-instance.interceptors.request.use((cfg) => {
-    if (typeof window !== 'undefined') {
-        const token = window.localStorage.getItem('token');
-        if (token) {
-            cfg.headers.authorization = `Bearer ${token}`;
-        }
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    try {
+      const session = await getSession();
+      if (session?.accessToken) {
+        config.headers.Authorization = `Bearer ${session.accessToken}`;
+      }
+    } catch (error) {
+      console.error('fkingerror', error)
     }
-    return cfg;
-}, (error) => {
-    return Promise.reject(error);
-});
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-export default instance;
+export default axiosInstance;

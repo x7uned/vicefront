@@ -17,7 +17,7 @@ export interface SignInFetch {
 }
 
 export interface ConfirmFetch {
-  email: string,
+  userId: string,
   confirmationCode: string
 }
 

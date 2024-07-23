@@ -55,26 +55,29 @@ const HeaderComponent = () => {
                     <button onClick={() => {setCartMenu(!cartMenu)}}>
                         <MdOutlineShoppingCart size="25px" />
                     </button>
+                    <button onClick={() => {console.log(session)}}>
+                        <MdOutlineShoppingCart size="12px" />
+                    </button>
                     {session && session.user ? 
                     <div className="flex justify-center">
                         <FaRegUserCircle onClick={() => {setProfileMenu(!profileMenu)}} size="25px" className='cursor-pointer' />
                         <div ref={profileMenuRef} className={`${profileMenu ? 'profileMenu show' : 'profileMenu'} py-3 flex-col border text-center items-center rounded-lg absolute bg-slate-500 w-52 mt-12 z-10`}>
                             <p className="text-sm">{session.user.email}</p>
                             <div className="w-full mt-2 border-t"></div>
-                            <Link href={`/user/${session.user.id}`} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200">
+                            <Link href={`/user/${session.user.id}`} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#252525]">
                                 <LuUser size="20px" />
                                 <p className="text-sm">Show profile</p>
                             </Link>
-                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#252525] cursor-pointer">
                                 <FaMoneyBillTransfer size="20px" />
                                 <p className="text-sm">Billing</p>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                            <div className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#252525] cursor-pointer">
                                 <MdOutlineSettings size="20px" />
                                 <p className="text-sm">Settings</p>
                             </div>
                             <div className="w-full border-t"></div>
-                            <div onClick={() => { signOut(); router.push('/') }} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                            <div onClick={() => { signOut(); router.push('/') }} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#252525] cursor-pointer">
                                 <CgLogOut size="20px" />
                                 <p className="text-sm">Log out</p>
                             </div>

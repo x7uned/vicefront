@@ -25,6 +25,7 @@ export interface SignInInterface {
 
 const SignInForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('')
     const router = useRouter();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -41,7 +42,15 @@ const SignInForm = () => {
                 password
             });
 
-            if (result?.ok) {
+            if (result?.error) {
+                if(result?.error == "Configuration") {
+                    setError("Login or password is invalid")
+                } else {
+                    setError("Something went wrong")
+                }
+            }
+
+            if (!result?.error) {
                 router.push('/')
             }
         } catch (error) {
@@ -80,6 +89,7 @@ const SignInForm = () => {
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
                         {errors.password && <span>{errors.password.message}</span>}
+                        {<span>{error}</span>}
                     </div>
                     <button className='sumbitButton' type="submit">Sign in</button>
                 </form>

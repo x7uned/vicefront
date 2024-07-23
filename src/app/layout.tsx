@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={kanitMini.className}>
-        <ThemeProvider attribute="class">
+        <ThemeProvider defaultTheme="system" attribute="class">
           <SessionProvider>
             <StoreProvider>
               <CartProvider>

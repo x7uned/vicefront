@@ -1,8 +1,8 @@
-import axios from 'axios';
-import type { NextAuthOptions } from "next-auth";
-import NextAuth from "next-auth";
+import axiosInstance from './src/redux/axios';
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from 'axios';
 
 interface DecodedUser {
   name?: string;
@@ -10,6 +10,7 @@ interface DecodedUser {
   image?: string;
   id?: string;
   exp?: number;
+  access_token?: string;
   [key: string]: any;
 }
 
@@ -25,24 +26,30 @@ const options: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
-        const {email, password} = credentials;
-        const res = await axios.post('http://localhost:4444/auth/login', {email, password});
+      async authorize(credentials) {
+        if (!credentials) return null;
 
-        if (res.data.success && res.data.user) {
-          return res.data.user;
-        } else {
+        try {
+          const { email, password } = credentials;
+          const res = await axios.post('http://localhost:4444/auth/login', { email, password });
+
+          if (res.data.success && res.data.access_token) {
+            return { ...res.data.user, access_token: res.data.access_token };
+          } else {
+            return null;
+          }
+        } catch (error) {
+          console.error('Authorization error:', error);
           return null;
         }
       }
     })
   ],
   callbacks: {
-    async signIn({ user, account, profile }: { user: DecodedUser, account: any, profile: any }) {
-
+    async signIn({ user, account }: { user: DecodedUser; account: any; }) {
       if (account?.provider === 'google') {
         try {
-          const fetchArray = {  
+          const fetchArray = {
             username: user.name || '',
             email: user.email || '',
             avatar: user.image || '',
@@ -51,8 +58,8 @@ const options: NextAuthOptions = {
 
           const response = await axios.post('http://localhost:4444/auth/oauth', fetchArray);
 
-          if (response.data.success) {
-            user.id = response.data.id;
+          if (response.data.success || response.data.access_token) {
+            user.access_token = response.data.access_token; // Save access_token
             return true;
           } else {
             console.error('Backend sign-in failed:', response.data.message);
@@ -62,47 +69,52 @@ const options: NextAuthOptions = {
           if (error.response && error.response.status === 409) {
             return true;
           } else if (error.response && error.response.status === 404) {
-            return false
+            return false;
           } else {
             console.error('Error sending user data to backend:', error);
             return false;
           }
         }
-      } else if (account?.provider == "credentials") {
+      } else if (account?.provider === 'credentials') {
         return true;
       }
+      return false;
     },
-    async session({ session, token }: { session: any, token: any }) {
-      try {
-        if (token) {
+    async session({ session, token }: { session: any; token: any; }) {
+      if (token) {
+        session.accessToken = token.access_token;
 
-          const jsonObj = {
-            id: token.id
-          }
-
-          const response = await axios.post('http://localhost:4444/auth/me', jsonObj);
+        try {
+          const response = await axios.get('http://localhost:4444/auth/me', {
+            headers: {
+              Authorization: `Bearer ${token.access_token}`
+            }
+          });
 
           if (response.data.success) {
-            session.user.id = token.id;
-            session.user.email = token.email;
-            session.user.name = token.name;
-            session.user.image = token.picture;
+            const user = response.data.user;
+
+            session.user.id = user.id;
+            session.user.email = user.email;
+            session.user.name = user.username;
+            session.user.image = user.avatar;
           } else {
             return null;
           }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          return null;
         }
-        return session;
-      } catch (error) {
-        console.log('error bra', error)
       }
+      return session;
     },
-    async jwt({ token, user }: { token: any, user: any }) {
-
+    async jwt({ token, user }: { token: any; user: any; }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.name = user.username;
-        token.picture = user.avatar;
+        token.name = user.name;
+        token.picture = user.image;
+        token.access_token = user.access_token;
       }
       return token;
     },

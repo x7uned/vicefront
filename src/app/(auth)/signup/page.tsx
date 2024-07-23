@@ -44,14 +44,14 @@ const SignUpForm = () => {
     const onSubmit = async (data: SignUpInterface) => {
         try {
             const params = {
-            email: data.email,
-            username: data.username,
-            password: data.password
+                email: data.email,
+                username: data.username,
+                password: data.password
             }
             const fetch = await dispatch(fetchSignUp(params))
 
             if (fetch?.payload.success && fetch?.payload.email) {
-                router.push(`/verification?email=${fetch?.payload.email}`)
+                router.push(`/verification?userId=${fetch?.payload.userId}`)
             }
         } catch (error) {
             console.error('Sign up failed:', error);
