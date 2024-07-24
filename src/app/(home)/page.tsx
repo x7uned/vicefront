@@ -9,7 +9,7 @@ export default function Home() {
   
   return (
     <div>
-      <div className="flex flex-col gap-20 w-full h-screen items-center">
+      <div className="flex flex-col gap-20 w-full h-full items-center">
         <div className="title flex mt-40 flex-col items-center">
           <p className={`text-[80px] ${kanit.className}`}>Improve your gaming</p>
           <p className={`text-2xl text-[#95959e] ${kanitMini.className}`}>Vice is an online store for all kinds of gaming devices</p>
@@ -25,7 +25,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col w-full items-center">
+        <div className="flex flex-col pb-48 w-full items-center">
           <div className="relative flex justify-center w-1/6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#272727]"></div>

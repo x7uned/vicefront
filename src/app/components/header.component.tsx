@@ -4,7 +4,7 @@ import { Titillium_Web } from "next/font/google";
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 
-import { MdLightMode, MdOutlineDarkMode, MdOutlineShoppingCart, MdOutlineSettings } from "react-icons/md";
+import { MdOutlineNotificationsNone , MdOutlineShoppingCart, MdOutlineSettings } from "react-icons/md";
 import { FaRegUserCircle } from "react-icons/fa";
 import { HiOutlineLogin } from "react-icons/hi";
 import { LuUser } from "react-icons/lu";
@@ -48,12 +48,12 @@ const HeaderComponent = () => {
         <>
             <div className="header absolute px-80 flex border-b-[1px] items-center justify-around w-full h-16">
                 <Link href="/"><p className={`text-[20px] cursor-pointer ${titilium.className}`}>Vice</p></Link>
-                <div className="flex w-28 justify-around">
-                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                        {theme === 'dark' ? <MdOutlineDarkMode size="25px" /> : <MdLightMode size="25px" />}
-                    </button>
+                <div className="flex w-24 justify-around">
                     <button onClick={() => {setCartMenu(!cartMenu)}}>
                         <MdOutlineShoppingCart size="25px" />
+                    </button>
+                    <button>
+                        <MdOutlineNotificationsNone size="25px" />
                     </button>
                     {session && session.user ? 
                     <div className="flex justify-center">
