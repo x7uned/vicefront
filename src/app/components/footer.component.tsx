@@ -1,13 +1,13 @@
-import { Titillium_Web } from "next/font/google";
+import { Outfit } from "next/font/google";
 import Link from "next/link";
 
-const titilium = Titillium_Web({ subsets: ["latin"], weight: ['600'] });
+const outfit = Outfit({ subsets: ["latin"], weight: ["300"] });
 
 const FooterComponent = () => {
     return (
-        <div className="footer px-96 py-5 flex flex-col h-48">
+        <div className={`footer px-96 py-5 flex flex-col h-48 ${outfit.className}`}>
             <div className="flex w-full justify-around h-full">
-                <Link href="/"><p className={`text-[20px] cursor-pointer ${titilium.className}`}>Vice</p></Link>
+                <Link href="/"><p className="text-[20px] cursor-pointer">Vice</p></Link>
                 <div className="flex flex-col mt-[2px]">
                     <p className="font-bold text-lg">Social</p>
                     <Link href="https://github.com/x7uned/vicefront" target="_blank"><p className="textChangeColor">GitHub</p></Link>

@@ -103,7 +103,7 @@ const OrderPage = () => {
   const deliveryCost = getDeliveryCost(postname);
 
   return (
-    <div className="flex justify-center items-start pt-16 px-36">
+    <div className="flex min-h-screen justify-center items-start pt-16 px-36">
       <div className="flex items-center py-8 px-12 w-3/5">
         <form className="flex w-full !flex-row formR" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex !flex-row gap-6 w-full">
@@ -206,7 +206,7 @@ const OrderPage = () => {
                   </div>
                 </div>
               </div>
-              <button className='sumbitButton mt-4' type="submit">Confirm order</button>
+              <button className='fillButton py-2 rounded-md mt-4' type="submit">Confirm order</button>
               {errorMessage && <span className="mt-2 w-full text-center">{errorMessage}</span>}
             </div>
           </div>

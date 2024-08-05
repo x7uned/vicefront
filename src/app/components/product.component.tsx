@@ -1,5 +1,6 @@
-import { Kanit } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { useCart } from "./contexts/cart.context";
+import { MdOutlineAddShoppingCart, MdOutlineZoomOutMap } from "react-icons/md";
 
 export interface Product {
     id: string,
@@ -12,7 +13,7 @@ export interface Product {
     bestseller: string
 }
 
-const kanit = Kanit({ subsets: ["latin"], weight: ["600"] });
+const outfit = Outfit({ subsets: ["latin"], weight: ["600"] });
 
 const ProductComponent = ({product} : {product: Product}) => {
     const {addToCart} = useCart();
@@ -24,7 +25,7 @@ const ProductComponent = ({product} : {product: Product}) => {
     return (
     <div 
         key={product.id} 
-        className={`flex ${kanit.className} h-[300px] overflow-hidden pb-8 flex-col rounded-lg border-[1px] items-center w-[24%] ${(product.bestseller === 'true') ? 'bestseller' : 'border-[#252525]'}`}
+        className={`nft flex ${outfit.className} h-[300px] w-[240px] overflow-hidden pb-8 flex-col rounded-lg border-[1px] items-center ${(product.bestseller === 'true') ? 'bestseller' : 'border-[#252525]'}`}
       >
         <div className={`flex text-white justify-center text-sm items-center w-full h-[20px] ${(product.bestseller === 'true') ? 'bestsellerbg' : ''}`}>
           {(product.bestseller === 'true') ? (<p className="tracking-[0.7em]">BESTSELLER</p>) : ''}
@@ -37,10 +38,11 @@ const ProductComponent = ({product} : {product: Product}) => {
           <p className='flex text-ellipsis overflow-hidden items-center text-[16px] h-12 font-semibold'>{product.title}</p>
         </div>
         <div className="flex w-full mt-10 gap-1 px-6 h-8 justify-between">
-          <button onClick={() => {handleAddToCart()}} className={`fillButton rounded-[6px] px-4 w-[100px] h-full cursor-pointer`}>Buy</button>
+          <button onClick={() => {handleAddToCart()}} className={`fillButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineAddShoppingCart size="20px" /></button>
+          <button className={`transparentButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineZoomOutMap size="20px" /></button>
           <p className={`w-[200px] text-end truncate text-xl rounded-[6px] px-4 h-full`}>{product.price}$</p>
         </div>
-      </div>
+    </div>
     )
 }
 

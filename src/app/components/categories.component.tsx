@@ -48,9 +48,9 @@ const Categories = () => {
             <div  className={`product cursor-pointer flex items-center flex-col p-6 border-[1px] rounded-xl w-64 h-36 ${kanitMini.className}`}>
               <p className={`${kanit.className} text-xl w-full flex justify-center text-center`}>{category.title}</p>
               <p className={`w-full mt-2 flex justify-center text-center text-gray-400`}>{category.subtitle}</p>
-              <div className="flex w-1/2 justify-around items-center mt-3">
+              <div className="flex gap-1 w-full justify-center items-center mt-3">
                 <TbCategory size={"20px"}/>
-                <p>{category.quantity} products</p>
+                <p className="w-24">{category.quantity} products</p>
               </div>
             </div>
           </Link>

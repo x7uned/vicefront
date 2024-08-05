@@ -1,7 +1,10 @@
 "use client";
 
 import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
-import { Kanit } from "next/font/google";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
+
+import { Outfit } from "next/font/google";
+
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from 'react';
@@ -10,7 +13,7 @@ import { useAppDispatch } from '@/redux/store';
 import ProductComponent, { Product } from "../components/product.component";
 import PriceFilter from "../components/price.filter";
 
-const kanitMini = Kanit({ subsets: ["latin"], weight: ["300"] });
+const outfit = Outfit({ subsets: ["latin"], weight: ["300"] });
 
 interface Brand {
   brand:string,
@@ -103,7 +106,7 @@ const CatalogPage = () => {
       {[...Array(24)].map((_, index) => (
         <div 
           key={index} 
-          className="flex w-[240px] h-[300px] pb-8 flex-col rounded-lg border-[1px] border-[#252525] items-center w-[24%] animate-pulse"
+          className="flex w-[240px] h-[300px] pb-8 flex-col rounded-lg border-[1px] border-[#252525] items-center animate-pulse"
         >
           <div className="w-full mt-4 h-[120px] bg-gray-300"></div>
           <div className="w-full mt-4 px-2 h-8 bg-gray-300"></div>
@@ -125,7 +128,7 @@ const CatalogPage = () => {
   };
 
   return (
-    <div className={`flex pt-16 flex-col w-full px-[25%] items-center ${kanitMini.className}`}>
+    <div className={`flex pt-16 flex-col w-full px-[25%] items-center ${outfit.className}`}>
       <div className="path flex gap-3 items-center justify-center mt-6 w-full">
         <Link href="/">
           <AiOutlineHome size="20px" />
@@ -133,12 +136,17 @@ const CatalogPage = () => {
         <p className="unselectable">/</p>
         <p className="unselectable">Catalog</p>
       </div>
-      <div className="relative w-1/2 mt-6 flex">
-        <AiOutlineSearch className="absolute mt-[2px] top-3 left-3 text-gray-500" size="20px" />
-        <input
-          placeholder="Search our products, brands & services"
-          className="searchBar pl-10 rounded-[8px] w-full h-12 focus:outline-none"
-        />
+      <div className="flex gap-1 mt-6 w-full items-center justify-center">
+        <div className="relative w-1/2 flex">
+          <AiOutlineSearch className="absolute mt-[2px] top-3 left-3 text-gray-500" size="20px" />
+          <input
+            placeholder="Search our products, brands & services"
+            className="searchBar pl-10 rounded-[8px] w-full h-12 focus:outline-none"
+          />
+        </div>
+        <button onClick={() => router.push("/product/new")} className="flex justify-center items-center searchBar rounded-[8px] w-12 h-12">
+            <MdOutlinePlaylistAdd size={"25px"} />
+        </button>
       </div>
       <div className="flex gap-2 mt-10 w-full h-10 justify-between">
         <div className="w-full">

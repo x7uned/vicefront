@@ -1,4 +1,3 @@
-import axiosInstance from './src/redux/axios';
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -11,6 +10,7 @@ interface DecodedUser {
   id?: string;
   exp?: number;
   access_token?: string;
+  admin: boolean;
   [key: string]: any;
 }
 
@@ -34,7 +34,7 @@ const options: NextAuthOptions = {
           const res = await axios.post('http://localhost:4444/auth/login', { email, password });
 
           if (res.data.success && res.data.access_token) {
-            return { ...res.data.user, access_token: res.data.access_token };
+            return { ...res.data.user, access_token: res.data.access_token, admin: res.data.admin };
           } else {
             return null;
           }
@@ -59,7 +59,8 @@ const options: NextAuthOptions = {
           const response = await axios.post('http://localhost:4444/auth/oauth', fetchArray);
 
           if (response.data.success || response.data.access_token) {
-            user.access_token = response.data.access_token; // Save access_token
+            user.access_token = response.data.access_token;
+            user.admin = response.data.admin;
             return true;
           } else {
             console.error('Backend sign-in failed:', response.data.message);
@@ -98,6 +99,7 @@ const options: NextAuthOptions = {
             session.user.email = user.email;
             session.user.name = user.username;
             session.user.image = user.avatar;
+            session.admin = response.data.admin;
           } else {
             return null;
           }

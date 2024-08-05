@@ -16,7 +16,9 @@ export default function Home() {
           <p className={`text-2xl text-[#95959e] ${kanitMini.className}`}>{`Powered by x7uned <3`}</p>
           <div className={`flex mt-12 w-[95vw] justify-center gap-5 ${kanitMini.className}`}>
             <button className="fillButton rounded-[6px] h-[36px] w-36">
-              <p>Add product</p>
+              <Link href="/product/new">
+                <p>Add product</p>
+              </Link>
             </button>
             <Link href="/catalog">
               <button className="transparentButton h-[36px] w-36">

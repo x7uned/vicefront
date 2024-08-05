@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
         config.headers.Authorization = `Bearer ${session.accessToken}`;
       }
     } catch (error) {
-      console.error('fkingerror', error)
+      console.error('Axios error', error)
     }
     return config;
   },
