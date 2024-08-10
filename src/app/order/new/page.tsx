@@ -12,6 +12,8 @@ import { useAppDispatch } from "@/redux/store";
 import { fetchCreateOrder } from "@/redux/orders.slice";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const schema = yup.object().shape({
   firstname: yup.string()
@@ -63,6 +65,7 @@ const OrderPage = () => {
   });
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const session = useSession();
   const { cart, totalAmount } = useCart();
   const postname = watch('postname', 'meest');
   const [errorMessage, setErrorMessage] = useState<string>("")
@@ -101,6 +104,14 @@ const OrderPage = () => {
   };
 
   const deliveryCost = getDeliveryCost(postname);
+
+  if(!session.data) {
+    return (
+      <div className="flex w-full h-screen justify-center items-center">
+        <p>If u want to create new order, u should <Link className="text-blue-300" href="/signin">login</Link></p>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen justify-center items-start pt-16 px-36">

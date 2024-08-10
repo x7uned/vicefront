@@ -2,46 +2,113 @@
 
 import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
-
 import { Outfit } from "next/font/google";
-
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from 'react';
-import { fetchFindPage, fetchGetBrands } from '@/redux/products.slice';
-import { useAppDispatch } from '@/redux/store';
+import React, { useEffect, useState } from "react";
+import { fetchFindPage, fetchGetBrands } from "@/redux/products.slice";
+import { useAppDispatch } from "@/redux/store";
 import ProductComponent, { Product } from "../components/product.component";
 import PriceFilter from "../components/price.filter";
+import Select, { SingleValue } from "react-select";
+import { useTheme } from "next-themes";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["300"] });
 
+const customStyles = (theme: string | undefined) => ({
+  control: (provided: any, state: any) => ({
+    ...provided,
+    borderRadius: '8px',
+    backgroundColor: theme === 'dark' ? '#252525' : 'white',
+    color: theme === 'dark' ? 'white' : '#252525',
+    borderColor: state.isFocused ? (theme === 'dark' ? 'white' : '#dddbe0') : (theme === 'dark' ? '#45484f' : '#dddbe0'),
+    boxShadow: state.isFocused ? `0 0 0 1px ${theme === 'dark' ? '#45484f' : '#dddbe0'}` : 'none',
+    transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
+    borderWidth: '1px'
+  }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? (theme === 'dark' ? '#18181a' : '#dddbe0') : (state.isFocused ? (theme === 'dark' ? '#252525' : '#f0f0f0') : (theme === 'dark' ? '#252525' : 'white')),
+    color: theme === 'dark' ? 'white' : 'black',
+    '&:hover': {
+      backgroundColor: theme === 'dark' ? '#333' : '#f0f0f0',
+    },
+  }),
+  menu: (provided: any) => ({
+    ...provided,
+    borderRadius: '8px',
+    overflow: 'hidden',
+  }),
+  menuList: (provided: any) => ({
+    ...provided,
+    padding: 0,
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: theme === 'dark' ? '#ccc' : '#888',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: theme === 'dark' ? '#eee' : '#333',
+  }),
+});
+
 interface Brand {
-  brand:string,
-  brandtitle:string
+  value: string;
+  label: string;
 }
 
-const CatalogPage = () => {
+interface Option {
+  value: string;
+  label: string;
+}
+
+const categoryOptions: Option[] = [
+  { value: "", label: "All categories" },
+  { value: "desktop", label: "Desktop" },
+  { value: "console", label: "Console" },
+  { value: "furniture", label: "Furniture" },
+  { value: "another", label: "Another" },
+];
+
+const sortOptions: Option[] = [
+  { value: "", label: "Sort" },
+  { value: "bestsellers", label: "Best sellers" },
+  { value: "cheap", label: "Cheap first" },
+  { value: "expensive", label: "Expensive first" },
+];
+
+const CatalogPage: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const category = searchParams.get("c");
-  const brand = searchParams.get("b");
-  const sort = searchParams.get("s");
-  const pricemin = searchParams.get("pm") || '';
-  const pricemax = searchParams.get("px") || '';
+  const { theme } = useTheme();
+
+  const category = searchParams.get("c") || "all";
+  const brand = searchParams.get("b") || "";
+  const sort = searchParams.get("s") || "sort";
+  const pricemin = searchParams.get("pm") || "";
+  const pricemax = searchParams.get("px") || "";
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [products, setProducts] = useState<Product[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([])
+  const [brands, setBrands] = useState<Brand[]>([]);
 
   const fetchPageData = async () => {
     const data = { page, category, brand, sort, pricemin, pricemax };
     const resultFindPage = await dispatch(fetchFindPage(data));
     const resultGetBrands = await dispatch(fetchGetBrands());
 
+    const allBrandsOption: Brand = { value: "", label: "All brands" };
+    const brandsWithAllOption = [
+      allBrandsOption,
+      ...(resultGetBrands.payload?.brands || []),
+    ];
+
     setTotalPages(resultFindPage.payload?.totalPages || 1);
     setProducts(resultFindPage.payload?.products || []);
-    setBrands(resultGetBrands.payload?.brands || [])
+    setBrands(brandsWithAllOption);
   };
 
   useEffect(() => {
@@ -51,41 +118,54 @@ const CatalogPage = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('page', newPage.toString());
+    newSearchParams.set("page", newPage.toString());
     router.push(`?${newSearchParams.toString()}`);
   };
 
-  const handleSortChange = (newSort: string) => {
+  const handleSortChange = (selectedOption: SingleValue<Option>) => {
     setPage(1);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('s', newSort.toString());
+    if (selectedOption && selectedOption.value) {
+      newSearchParams.set("s", selectedOption.value);
+    } else {
+      newSearchParams.delete("s");
+    }
     router.push(`?${newSearchParams.toString()}`);
   };
 
-  const handleBrandChange = (newBrand: string) => {
+  const handleBrandChange = (selectedOption: SingleValue<Brand>) => {
     setPage(1);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('b', newBrand);
+    if (selectedOption && selectedOption.value) {
+      newSearchParams.set("b", selectedOption.value);
+    } else {
+      newSearchParams.delete("b");
+    }
     router.push(`?${newSearchParams.toString()}`);
   };
 
-  const handleCategoryChange = (newCategory: string) => {
+  const handleCategoryChange = (selectedOption: SingleValue<Option>) => {
     setPage(1);
-    
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('c', newCategory);
+    if (selectedOption && selectedOption.value) {
+      newSearchParams.set("c", selectedOption.value);
+    } else {
+      newSearchParams.delete("c");
+    }
     router.push(`?${newSearchParams.toString()}`);
   };
 
-  const ProductsList = () => {
-    const PageSwitch = () => {
+  const ProductsList: React.FC = () => {
+    const PageSwitch: React.FC = () => {
       const pageButtons = [];
       for (let i = 1; i <= totalPages; i++) {
         pageButtons.push(
           <button
             key={i}
             onClick={() => handlePageChange(i)}
-            className={`mx-1 px-3 py-1 rounded ${i === page ? 'fillButton' : 'hover:bg-[#252525]'}`}
+            className={`mx-1 px-3 py-1 rounded ${
+              i === page ? "fillButton" : ""
+            }`}
           >
             {i}
           </button>
@@ -96,26 +176,28 @@ const CatalogPage = () => {
 
     return (
       <>
-        <div className="flex flex-wrap gap-[12px] justify-between">
-  {products.length !== 0 ? (
-    products.map((product: Product) => (
-      <ProductComponent product={product} />
-    ))
-  ) : (
-    <div className="flex flex-wrap gap-[12px] justify-between">
-      {[...Array(24)].map((_, index) => (
-        <div 
-          key={index} 
-          className="flex w-[240px] h-[300px] pb-8 flex-col rounded-lg border-[1px] border-[#252525] items-center animate-pulse"
-        >
-          <div className="w-full mt-4 h-[120px] bg-gray-300"></div>
-          <div className="w-full mt-4 px-2 h-8 bg-gray-300"></div>
-          <div className="flex w-full mt-10 gap-1 px-4 h-8 bg-gray-300"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {products.length !== 0 ? (
+            products.map((product: Product, index) => (
+              <div key={index} className="flex justify-center">
+                <ProductComponent product={product} />
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-wrap gap-[12px] justify-between">
+              {[...Array(24)].map((_, index) => (
+                <div
+                  key={index}
+                  className="flex w-[240px] h-[300px] pb-8 flex-col rounded-lg border-[1px] border-[#252525] items-center animate-pulse"
+                >
+                  <div className="w-full mt-4 h-[120px] bg-gray-300"></div>
+                  <div className="w-full mt-4 px-2 h-8 bg-gray-300"></div>
+                  <div className="flex w-full mt-10 gap-1 px-4 h-8 bg-gray-300"></div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      ))}
-    </div>
-  )}
-</div>
         <div className="flex w-full justify-center h-48 mt-12">
           <div className="flex flex-col items-center w-2/3">
             <div className="flex mt-3">
@@ -128,7 +210,9 @@ const CatalogPage = () => {
   };
 
   return (
-    <div className={`flex pt-16 flex-col w-full px-[25%] items-center ${outfit.className}`}>
+    <div
+      className={`flex pt-16 flex-col px-[15px] sm:px-[20px] md:px-[60px] xl:px-[200px] w-full items-center ${outfit.className}`}
+    >
       <div className="path flex gap-3 items-center justify-center mt-6 w-full">
         <Link href="/">
           <AiOutlineHome size="20px" />
@@ -138,45 +222,57 @@ const CatalogPage = () => {
       </div>
       <div className="flex gap-1 mt-6 w-full items-center justify-center">
         <div className="relative w-1/2 flex">
-          <AiOutlineSearch className="absolute mt-[2px] top-3 left-3 text-gray-500" size="20px" />
+          <AiOutlineSearch
+            className="absolute mt-[2px] top-3 left-3 text-gray-500"
+            size="20px"
+          />
           <input
             placeholder="Search our products, brands & services"
             className="searchBar pl-10 rounded-[8px] w-full h-12 focus:outline-none"
           />
         </div>
-        <button onClick={() => router.push("/product/new")} className="flex justify-center items-center searchBar rounded-[8px] w-12 h-12">
-            <MdOutlinePlaylistAdd size={"25px"} />
+        <button
+          onClick={() => router.push("/product/new")}
+          className="flex justify-center items-center searchBar rounded-[8px] w-12 h-12"
+        >
+          <MdOutlinePlaylistAdd size={"25px"} />
         </button>
       </div>
       <div className="flex gap-2 mt-10 w-full h-10 justify-between">
-        <div className="w-full">
-          <select onChange={(event) => handleCategoryChange(event.target.value)} defaultValue={category || "all"} className="filter cursor-pointer focus:outline-none text-center no-spinner h-8 px-4 rounded-lg items-center flex w-full">
-            <option value="all">All categories</option>
-            <option value="desktop">Desktop</option>
-            <option value="console">Console</option>
-            <option value="furniture">Furniture</option>
-            <option value="another">Another</option>
-          </select>
+        <div className="flex gap-2 flex-col sm:flex-row w-full">
+          <div className="w-full">
+            <Select<Option>
+              onChange={handleCategoryChange}
+              options={categoryOptions}
+              styles={customStyles(theme)}
+              defaultValue={categoryOptions.find((c) => c.value === category)}
+              placeholder="Select a category"
+            />
+          </div>
+          <PriceFilter />
         </div>
-        <PriceFilter />
-        <div className="w-full">
-          <select onChange={(event) => handleBrandChange(event.target.value)} defaultValue={brand || "all"} className="filter focus:outline-none text-center no-spinner cursor-pointer h-8 rounded-lg items-center w-full">
-            <option value="all">All brands</option>
-            {brands.map((brand, index) => (
-              <option key={index} value={brand.brand}>{brand.brandtitle}</option>
-            ))}
-          </select>
-        </div>
-        <div className="w-full">
-          <select onChange={(event) => handleSortChange(event.target.value)} defaultValue={sort || "sort"} className="filter focus:outline-none text-center no-spinner cursor-pointer h-8 rounded-lg items-center w-full">
-            <option value="sort">Sort</option>
-            <option value="bestsellers">Best sellers</option>
-            <option value="cheap">Cheap first</option>
-            <option value="expensive">Expensive first</option>
-          </select>
+        <div className="flex gap-2 flex-col sm:flex-row w-full">
+          <div className="w-full">
+            <Select<Brand>
+              onChange={handleBrandChange}
+              options={brands}
+              styles={customStyles(theme)}
+              defaultValue={brands.find((b) => b.value === brand)}
+              placeholder="Select a brand"
+            />
+          </div>
+          <div className="w-full">
+            <Select<Option>
+              onChange={handleSortChange}
+              options={sortOptions}
+              styles={customStyles(theme)}
+              defaultValue={sortOptions.find((s) => s.value === sort)}
+              placeholder="Sort by"
+            />
+          </div>
         </div>
       </div>
-      <div className="mt-10 w-[1000px]">
+      <div className="mt-10 w-full">
         <ProductsList />
       </div>
     </div>

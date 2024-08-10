@@ -45,8 +45,8 @@ const HeaderComponent = () => {
     if (!mounted) return null;
 
     return (
-        <>
-            <div className="header absolute px-80 flex border-b-[1px] items-center justify-around w-full h-16">
+        <div className="flex justify-center w-screen">
+            <div className="header w-1/2 sm:w-[90%] absolute flex items-center justify-center gap-[20%] h-16">
                 <Link href="/"><p className={`text-[20px] cursor-pointer ${titilium.className}`}>Vice</p></Link>
                 <div className={`flex justify-around ${session?.admin ? 'w-36': 'w-24'}`}>
                     {session?.admin && <AdminToolsComponent />}
@@ -59,7 +59,7 @@ const HeaderComponent = () => {
                     {session && session.user ? 
                     <div className="flex justify-center">
                         <FaRegUserCircle onClick={() => {setProfileMenu(!profileMenu)}} size="25px" className='cursor-pointer' />
-                        <div ref={profileMenuRef} className={`${profileMenu ? 'profileMenu show' : 'profileMenu'} flex-col border text-center items-center rounded-lg absolute bg-slate-500 w-52 mt-12 z-10`}>
+                        <div ref={profileMenuRef} className={`${profileMenu ? 'profileMenu show' : 'profileMenu'} flex-col border overflow-hidden text-center items-center rounded-lg absolute bg-slate-500 w-52 mt-12 z-10`}>
                             <p className="text-sm mt-2">{session.user.email}</p>
                             <div className="w-full mt-2 border-t"></div>
                             <Link href={`/user/${session.user.id}`} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#252525]">
@@ -80,15 +80,16 @@ const HeaderComponent = () => {
                                 <p className="text-sm">Log out</p>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                     : 
                     <Link href="/signin">
                         <HiOutlineLogin size="25px" className='cursor-pointer' />
                     </Link>}
                 </div>
+                <Cart cartMenu={cartMenu} setCartMenu={setCartMenu} />
             </div>
-            <Cart cartMenu={cartMenu} setCartMenu={setCartMenu} />
-        </>
+        </div>
+        
     )
 }
 

@@ -1,15 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from './axios';
 import axiosInstance from './axios';
-
-interface FindPageFetch {
-  page: number;
-  category: string | null;
-  brand: string | null;
-  sort: string | null;
-  pricemin: string | null;
-  pricemax: string | null;
-}
 
 interface OrdersState {
   products: any[] | null;
@@ -27,7 +17,7 @@ export interface OrderFetchData {
   firstname: string;
   secondname?: string | undefined;
   surname: string;
-  cart: Object[];
+  cart: string;
   number: string;
   email: string;
   postname: 'meest' | 'uapost' | 'novapost' | 'self';

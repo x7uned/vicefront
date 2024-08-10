@@ -11,7 +11,7 @@ interface FindPageFetch {
   pricemax: string | null;
 }
 
-interface Product {
+export interface Product {
   category: string;
   title: string;
   subtitle?: string;
@@ -62,7 +62,7 @@ export const fetchCreateProduct = createAsyncThunk(
   'products/fetchCreateProduct',
   async (product: Product) => {
     try {
-      const response = await axiosInstance.post('products/create', product);
+      const response = await axiosInstance.post('admin/createProduct', product);
       return response.data;
     } catch (error) {
       console.error('Failed to create product', error);

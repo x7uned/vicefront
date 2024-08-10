@@ -45,7 +45,7 @@ const Cart = ({ cartMenu, setCartMenu }: CartProps) => {
     return (
         <div 
             ref={cartMenuRef} 
-            className={`cartMenu ${cartMenu ? 'show' : ''} z-10`} 
+            className={`cartMenu ${cartMenu ? 'show' : ''} z-10 top-12`} 
             role="dialog" 
             aria-labelledby="cart-heading" 
             aria-hidden={!cartMenu}

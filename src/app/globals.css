@@ -38,6 +38,7 @@
   --gold: #F29000;
   --footer-bg: #27272a;
   --selection-color: #d3d3d3;
+  --input-color: #dddbe0;
 }
 
 .dark {
@@ -54,17 +55,15 @@
   --gold: #e0ac00;
   --footer-bg: #252525;
   --selection-color: #3d3d3d;
+  --input-color: #171719;
 
   .nft{
     user-select:none;
-    max-width: 300px;
     border: 1px solid #ffffff22;
     background-color: #282c34;
     background: linear-gradient(0deg, rgba(40,44,52,1) 0%, #22222280 100%);
     box-shadow: 0 7px 20px 5px #00000088;
     border-radius: .7rem;
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
     overflow: hidden;
     transition: .3s all;
   }
@@ -78,6 +77,15 @@
   100%{
     opacity: 100%;
     transform: scale(1);
+  }
+}
+
+@keyframes opac {
+  0%{
+    opacity: 0%;
+  }
+  100%{
+    opacity: 100%;
   }
 }
 
@@ -118,6 +126,10 @@ body {
     overflow: hidden;
   }
 
+  .bganim{
+    animation: opac 0.2s ease-in-out;
+  }
+
   .footer{
     color: white;
     background-color: var(--footer-bg)
@@ -136,6 +148,11 @@ body {
     width: 100%;
     height: 1px;
     background-color: var(--horizonalLine-color);
+  }
+
+  .vl{
+    width: 3px;
+    background-color: var(--searchbar-text);
   }
 
   .hideScroll {
@@ -194,10 +211,6 @@ body {
     background-color: var(--gold)
   }
 
-  .filter{
-    background-color: var(--searchbar-color);
-  }
-
   .unselectable {
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -206,11 +219,14 @@ body {
   }
 
   .filterChooser{
-    background-color: var(--searchbar-color);
     opacity: 0%;
     z-index: 3;
     transition: opacity 0.2s ease;
     pointer-events: none;
+
+    input{
+      background-color: var(--input-color);
+    }
   }
 
   .filterChooser.show{

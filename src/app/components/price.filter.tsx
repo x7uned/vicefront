@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter, useSearchParams } from "next/navigation";
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 interface PriceInterface {
   priceMax: number;
@@ -75,10 +76,11 @@ const PriceFilter = () => {
 
   return (
     <div className="w-full">
-      <div onClick={handlePriceClick} className="filter cursor-pointer w-full h-8 bg-slate-400 relative rounded-lg items-center flex">
-        <p className="w-full unselectable flex justify-center">Price</p> 
+      <div onClick={handlePriceClick} className={`${showPriceChooser ? 'border border-[#dddbe0] dark:border-[#45484f]' : ''} dark:bg-[#252525] px-3 dark:text-[#c5c5c5] text-[#8d8d8d] cursor-pointer w-full h-[38px] relative justify-between rounded-lg items-center flex`}>
+        <p className="unselectable flex justify-center">Price {(pricemin=="") ? "" : `(${pricemin}$ - ${pricemax}$)`}</p>
+        <MdKeyboardArrowDown size="20px" />
       </div>
-      <div ref={priceRef} className={`${showPriceChooser ? 'filterChooser show' : 'filterChooser'} relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36`}>
+      <div ref={priceRef} className={`${showPriceChooser ? 'filterChooser show' : 'filterChooser'} dark:bg-[#252525] bg-white dark:shadow-none shadow-[0_0_0_1px_#dddbe0] relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36`}>
         <form className="flex flex-col justify-around items-center h-full w-full" onSubmit={handleSubmit(onSubmit)}>
           <label>From</label>
           <input

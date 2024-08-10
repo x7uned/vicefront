@@ -5,9 +5,9 @@ const outfit = Outfit({ subsets: ["latin"], weight: ["300"] });
 
 const FooterComponent = () => {
     return (
-        <div className={`footer px-96 py-5 flex flex-col h-48 ${outfit.className}`}>
+        <div className={`footer py-5 flex flex-col h-48 ${outfit.className}`}>
             <div className="flex w-full justify-around h-full">
-                <Link href="/"><p className="text-[20px] cursor-pointer">Vice</p></Link>
+                <Link href="/"><p className="text-[20px] hidden sm:flex cursor-pointer">Vice</p></Link>
                 <div className="flex flex-col mt-[2px]">
                     <p className="font-bold text-lg">Social</p>
                     <Link href="https://github.com/x7uned/vicefront" target="_blank"><p className="textChangeColor">GitHub</p></Link>
@@ -22,7 +22,7 @@ const FooterComponent = () => {
                     <p className="textChangeColor cursor-pointer">Terms</p>
                     <p className="textChangeColor cursor-pointer">Privacy</p>
                 </div>
-                <p>Powered by <Link href="https://github.com/x7uned" target="_blank"><span className="font-bold">x7uned</span></Link></p>
+                <p className="px-2 w-[100px]">Powered by <Link href="https://github.com/x7uned" target="_blank"><span className="font-bold">x7uned</span></Link></p>
             </div>
         </div>
     )

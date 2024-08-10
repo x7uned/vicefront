@@ -10,6 +10,8 @@ import { fetchUploadImage } from '@/redux/upload.slice';
 import { MdOutlineAddShoppingCart, MdOutlineZoomOutMap } from 'react-icons/md';
 import { fetchCreateProduct } from '@/redux/products.slice';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["600"] });
 
@@ -17,7 +19,7 @@ const schema = yup.object().shape({
     category: yup.string().required('Category is required').oneOf(['console', 'desktop', 'furniture', 'another'], 'Category not found'),
     title: yup.string().min(3, 'Min 3 symbols').max(50, 'Max 50 symbols').required('Title is required'),
     subtitle: yup.string().max(100, 'Max 100 symbols'),
-    image: yup.mixed().required('Image is required').test('fileType', 'Unsupported File Format', value => value && ['image/jpeg', 'image/png', 'image/gif'].includes(value[0]?.type)).test('fileSize', 'File Size is too large', value => value && value[0]?.size <= 2000000), // 2MB
+    image: yup.mixed().required('Image is required').test('fileType', 'Unsupported File Format', value => value && ['image/jpeg', 'image/png', 'image/gif'].includes(value[0]?.type)).test('fileSize', 'File Size is too large', value => value && value[0]?.size <= 5000000), // 5MB
     brand: yup.string().required('Brand is required'),
     price: yup.number().required('Price is required').typeError('Price must be a number'),
 });
@@ -34,6 +36,7 @@ interface Product {
 const NewProductComponent = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const session = useSession();
     const [fileErrorMessage, setFileErrorMessage] = useState("")
     const [globalErrorMessage, setGlobalErrorMessage] = useState("")
     const [product, setProduct] = useState<Product>({
@@ -93,9 +96,33 @@ const NewProductComponent = () => {
         }
     };
 
+    if(!session.data || !session.data.admin) {
+        return (
+          <div className="flex w-full h-screen justify-center items-center">
+            <p>Access Denied</p>
+          </div>
+        )
+      }
+
     return (
-        <div className={`w-full h-screen flex justify-center items-center gap-3 ${outfit.className}`}>
-            <div className="flex w-[36rem]">
+        <div className={`w-full min-h-screen flex flex-col sm:flex-row justify-center items-center gap-12 ${outfit.className}`}>
+            <div className={`nft mt-16 flex h-[300px] w-[240px] overflow-hidden pb-8 flex-col rounded-lg border-[1px] items-center`}>
+                <div className={`flex text-white justify-center text-sm items-center w-full h-[20px]`}>
+                </div>
+                <div 
+                className="w-full mt-4 h-[120px] bg-center bg-contain bg-no-repeat" 
+                style={{ backgroundImage: `url(${product.image})` }}
+                ></div>
+                <div className="flex w-full mt-4 px-2 justify-center text-center h-8">
+                    <p className='flex text-ellipsis overflow-hidden items-center text-[16px] h-12 font-semibold'>{product.title}</p>
+                </div>
+                <div className="flex w-full mt-10 gap-1 px-6 h-8 justify-between">
+                <button className={`fillButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineAddShoppingCart size="20px" /></button>
+                <button className={`transparentButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineZoomOutMap size="20px" /></button>
+                    <p className={`w-[200px] text-end truncate text-xl rounded-[6px] px-4 h-full`}>{product.price}$</p>
+                </div>
+            </div>
+            <div className="flex max-w-[100rem] pb-12">
                 <form className="formR" onSubmit={handleSubmit(onSubmit)}>
                     <div className="w-full">
                         <label htmlFor="category">Category:</label>
@@ -169,22 +196,6 @@ const NewProductComponent = () => {
                     <button type="submit" className="submitButton">Submit</button>
                     {globalErrorMessage && <span className='text-red-500'>{globalErrorMessage}</span>}
                 </form>
-            </div>
-            <div className={`nft flex h-[300px] w-[240px] overflow-hidden pb-8 flex-col rounded-lg border-[1px] items-center`}>
-                <div className={`flex text-white justify-center text-sm items-center w-full h-[20px]`}>
-                </div>
-                <div 
-                className="w-full mt-4 h-[120px] bg-center bg-contain bg-no-repeat" 
-                style={{ backgroundImage: `url(${product.image})` }}
-                ></div>
-                <div className="flex w-full mt-4 px-2 justify-center text-center h-8">
-                    <p className='flex text-ellipsis overflow-hidden items-center text-[16px] h-12 font-semibold'>{product.title}</p>
-                </div>
-                <div className="flex w-full mt-10 gap-1 px-6 h-8 justify-between">
-                <button className={`fillButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineAddShoppingCart size="20px" /></button>
-                <button className={`transparentButton flex justify-center items-center rounded-[6px] w-[60px] h-full cursor-pointer`}><MdOutlineZoomOutMap size="20px" /></button>
-                    <p className={`w-[200px] text-end truncate text-xl rounded-[6px] px-4 h-full`}>{product.price}$</p>
-                </div>
             </div>
         </div>
     )
