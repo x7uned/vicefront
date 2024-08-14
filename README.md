@@ -26,11 +26,11 @@ To install and run the project, follow these steps:
 
 1. Clone the repository:
    
-   git clone https://github.com/x7uned/vice-front.git
+   git clone https://github.com/x7uned/vicefront
    
 2. Navigate to the project directory:
 
-  cd vice-front
+  cd vicefront
 
 3. Install dependencies:
 
