@@ -1,113 +1,152 @@
-"use client";
+'use client'
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useRouter, useSearchParams } from "next/navigation";
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { MdKeyboardArrowDown } from 'react-icons/md'
+import * as yup from 'yup'
 
 interface PriceInterface {
-  priceMax: number;
-  priceMin: number;
+	priceMax: number
+	priceMin: number
 }
 
 const schema = yup.object().shape({
-  priceMin: yup
-    .number()
-    .typeError("PriceMin must be a number")
-    .required("This field is required")
-    .min(0, "Value cannot be less than 0"),
-  priceMax: yup
-    .number()
-    .typeError("PriceMax must be a number")
-    .required("This field is required")
-    .min(0, "Value cannot be less than 0")
-    .test("is-greater", "Max price must be greater than min price", function (value) {
-      const { priceMin } = this.parent;
-      return value > priceMin;
-    }),
-});
+	priceMin: yup
+		.number()
+		.typeError('PriceMin must be a number')
+		.required('This field is required')
+		.min(0, 'Value cannot be less than 0'),
+	priceMax: yup
+		.number()
+		.typeError('PriceMax must be a number')
+		.required('This field is required')
+		.min(0, 'Value cannot be less than 0')
+		.test(
+			'is-greater',
+			'Max price must be greater than min price',
+			function (value) {
+				const { priceMin } = this.parent
+				return value > priceMin
+			}
+		),
+})
 
 const PriceFilter = () => {
-  const searchParams = useSearchParams();
-  const priceRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const pricemin = searchParams.get("pm") || '';
-  const pricemax = searchParams.get("px") || '';
-  const [showPriceChooser, setShowPriceChooser] = useState(false);
+	const searchParams = useSearchParams()
+	const priceRef = useRef<HTMLDivElement>(null)
+	const router = useRouter()
+	const pricemin = searchParams.get('pm') || ''
+	const pricemax = searchParams.get('px') || ''
+	const [showPriceChooser, setShowPriceChooser] = useState(false)
 
-  const { register, handleSubmit, formState: { errors } } = useForm<PriceInterface>({
-    resolver: yupResolver(schema),
-  });
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<PriceInterface>({
+		resolver: yupResolver(schema),
+	})
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showPriceChooser && priceRef.current && !priceRef.current.contains(event.target as Node)) {
-        setShowPriceChooser(false);
-      }
-    };
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				showPriceChooser &&
+				priceRef.current &&
+				!priceRef.current.contains(event.target as Node)
+			) {
+				setShowPriceChooser(false)
+			}
+		}
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showPriceChooser]);
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [showPriceChooser])
 
-  const handlePriceClick = () => {
-    setShowPriceChooser((prev) => !prev);
-  };
+	const handlePriceClick = () => {
+		setShowPriceChooser(prev => !prev)
+	}
 
-  const onSubmit = (data: PriceInterface) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('pm', String(data.priceMin));
-    newSearchParams.set('px', String(data.priceMax));
-    setShowPriceChooser(false);
-    router.push(`?${newSearchParams.toString()}`);
-  };
+	const onSubmit = (data: PriceInterface) => {
+		const newSearchParams = new URLSearchParams(searchParams)
+		newSearchParams.set('pm', String(data.priceMin))
+		newSearchParams.set('px', String(data.priceMax))
+		setShowPriceChooser(false)
+		router.push(`?${newSearchParams.toString()}`)
+	}
 
-  const resetPriceParams = () => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.delete('pm');
-    newSearchParams.delete('px');
-    setShowPriceChooser(false);
-    router.push(`?${newSearchParams.toString()}`);
-  }
+	const resetPriceParams = () => {
+		const newSearchParams = new URLSearchParams(searchParams)
+		newSearchParams.delete('pm')
+		newSearchParams.delete('px')
+		setShowPriceChooser(false)
+		router.push(`?${newSearchParams.toString()}`)
+	}
 
-  return (
-    <div className="w-full">
-      <div onClick={handlePriceClick} className={`${showPriceChooser ? 'border border-[#dddbe0] dark:border-[#45484f]' : ''} dark:bg-[#252525] px-3 dark:text-[#c5c5c5] text-[#8d8d8d] cursor-pointer w-full h-[38px] relative justify-between rounded-lg items-center flex`}>
-        <p className="unselectable flex justify-center">Price {(pricemin=="") ? "" : `(${pricemin}$ - ${pricemax}$)`}</p>
-        <MdKeyboardArrowDown size="20px" />
-      </div>
-      <div ref={priceRef} className={`${showPriceChooser ? 'filterChooser show' : 'filterChooser'} dark:bg-[#252525] bg-white dark:shadow-none shadow-[0_0_0_1px_#dddbe0] relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36`}>
-        <form className="flex flex-col justify-around items-center h-full w-full" onSubmit={handleSubmit(onSubmit)}>
-          <label>From</label>
-          <input
-            type="number"
-            className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
-            min="0"
-            placeholder="0"
-            defaultValue={pricemin}
-            {...register("priceMin")}
-          />
-          {errors.priceMin && <p className="text-red-500 text-center">{errors.priceMin.message}</p>}
-          <label>To</label>
-          <input
-            type="number"
-            className="no-spinner focus:outline-none w-2/3 rounded-sm pl-1"
-            min="0"
-            defaultValue={pricemax}
-            placeholder="∞"
-            {...register("priceMax")}
-          />
-          {errors.priceMax && <p className="text-red-500 text-center line-clamp-3">{errors.priceMax.message}</p>}
-          <p className="cursor-pointer" onClick={resetPriceParams}>Reset</p>
-          <button className="p-1 w-2/3 rounded-lg" type="submit">Save</button>
-        </form>
-      </div>
-    </div>
-  );
-};
+	return (
+		<div className='w-full'>
+			<div
+				onClick={handlePriceClick}
+				className={`${
+					showPriceChooser ? 'border-2' : 'border'
+				} dark:bg-[#252525] border-[#dddbe0] dark:border-[#45484f] px-3 dark:text-[#c5c5c5] text-[#8d8d8d] cursor-pointer w-full h-[38px] relative justify-between rounded-lg items-center flex`}
+			>
+				<p className='unselectable flex justify-center'>
+					Price {pricemin == '' ? '' : `(${pricemin}$ - ${pricemax}$)`}
+				</p>
+				<MdKeyboardArrowDown size='20px' />
+			</div>
+			<div
+				ref={priceRef}
+				className={`${
+					showPriceChooser ? 'opacity-100' : 'opacity-0 pointer-events-none'
+				} dark:bg-[#252525] bg-white dark:shadow-none shadow-[0_0_0_1px_#dddbe0] relative rounded-lg py-2 mt-[0.4rem] w-full min-h-36`}
+			>
+				<form
+					className='flex flex-col justify-around items-center h-full w-full'
+					onSubmit={handleSubmit(onSubmit)}
+				>
+					<label>From</label>
+					<input
+						type='number'
+						className='no-spinner focus:outline-none w-2/3 rounded-sm pl-1'
+						min='0'
+						placeholder='0'
+						defaultValue={pricemin}
+						{...register('priceMin')}
+					/>
+					{errors.priceMin && (
+						<p className='text-red-500 text-center'>
+							{errors.priceMin.message}
+						</p>
+					)}
+					<label>To</label>
+					<input
+						type='number'
+						className='no-spinner focus:outline-none w-2/3 rounded-sm pl-1'
+						min='0'
+						defaultValue={pricemax}
+						placeholder='∞'
+						{...register('priceMax')}
+					/>
+					{errors.priceMax && (
+						<p className='text-red-500 text-center line-clamp-3'>
+							{errors.priceMax.message}
+						</p>
+					)}
+					<p className='cursor-pointer' onClick={resetPriceParams}>
+						Reset
+					</p>
+					<button className='p-1 w-2/3 rounded-lg' type='submit'>
+						Save
+					</button>
+				</form>
+			</div>
+		</div>
+	)
+}
 
-export default PriceFilter;
+export default PriceFilter
