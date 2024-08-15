@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { default as axios, default as axiosInstance } from './axios'
+import { default as axiosInstance } from './axios'
 
 const initialState = {
 	user: null,
@@ -45,7 +45,7 @@ export const fetchSignUp = createAsyncThunk(
 	'user/fetchSignUp',
 	async (userData: SignUpFetch) => {
 		try {
-			const response = await axios.post('auth/register', userData)
+			const response = await axiosInstance.post('auth/register', userData)
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong', error)
@@ -73,7 +73,7 @@ export const fetchFindUser = createAsyncThunk(
 	'user/fetchFindUser',
 	async (data: fetchFindUserInterface) => {
 		try {
-			const response = await axios.get(`auth/findUser?id=${data.id}`)
+			const response = await axiosInstance.get(`auth/findUser?id=${data.id}`)
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong #findUser', error)
@@ -85,7 +85,7 @@ export const fetchSignIn = createAsyncThunk(
 	'user/fetchSignIn',
 	async (userData: SignInFetch) => {
 		try {
-			const response = await axios.post('auth/login', userData)
+			const response = await axiosInstance.post('auth/login', userData)
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong', error)
@@ -97,7 +97,7 @@ export const fetchConfirm = createAsyncThunk(
 	'user/fetchConfirm',
 	async (userData: ConfirmFetch) => {
 		try {
-			const response = await axios.post('auth/confirm', userData)
+			const response = await axiosInstance.post('auth/confirm', userData)
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong', error)
