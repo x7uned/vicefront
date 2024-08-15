@@ -1,3 +1,5 @@
+'use client'
+
 import { useAppDispatch } from '@/redux/store'
 import { fetchConfirm } from '@/redux/user.slice'
 import { yupResolver } from '@hookform/resolvers/yup'
