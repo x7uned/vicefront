@@ -28,7 +28,7 @@ const HeaderComponent = () => {
 
 	return (
 		<div className='flex justify-center w-screen'>
-			<div className='header w-1/2 sm:w-[90%] absolute flex items-center justify-center gap-[20%] h-16'>
+			<div className='header bg-backgroundColor w-full sm:w-[90%] absolute flex items-center justify-center gap-[20%] h-16'>
 				<Link href='/'>
 					<p className={`text-[20px] cursor-pointer ${titilium.className}`}>
 						Vice
