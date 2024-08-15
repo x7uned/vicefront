@@ -382,3 +382,13 @@
 // }
 
 // export default OrderPage
+
+const OrderPage = () => {
+	return (
+		<div className='flex'>
+			<p>Sus</p>
+		</div>
+	)
+}
+
+export default OrderPage
