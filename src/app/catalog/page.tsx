@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 import { Outfit } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { AiOutlineHome, AiOutlineSearch } from 'react-icons/ai'
 import { MdOutlinePlaylistAdd } from 'react-icons/md'
 import Select, { SingleValue } from 'react-select'
@@ -294,7 +294,9 @@ const CatalogPage: React.FC = () => {
 				</div>
 			</div>
 			<div className='mt-10 w-full'>
-				<ProductsList />
+				<Suspense fallback={<div>Loading products...</div>}>
+					<ProductsList />
+				</Suspense>
 			</div>
 		</div>
 	)
