@@ -208,16 +208,16 @@ const CatalogPage: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<div className='mt-10 w-full'>
-				<Suspense fallback={<div>Loading products...</div>}>
+			<Suspense fallback={<div>Loading products...</div>}>
+				<div className='mt-10 w-full'>
 					<ProductsList
 						products={products}
 						totalPages={totalPages}
 						page={page}
 						handlePageChange={handlePageChange}
 					/>
-				</Suspense>
-			</div>
+				</div>
+			</Suspense>
 		</div>
 	)
 }
