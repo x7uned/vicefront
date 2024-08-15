@@ -31,10 +31,13 @@ const options: NextAuthOptions = {
 
 				try {
 					const { email, password } = credentials
-					const res = await axios.post('http://localhost:4444/auth/login', {
-						email,
-						password,
-					})
+					const res = await axios.post(
+						`${process.env.BACKEND_URL}/auth/login`,
+						{
+							email,
+							password,
+						}
+					)
 
 					if (res.data.success && res.data.access_token) {
 						return {
@@ -65,7 +68,7 @@ const options: NextAuthOptions = {
 					}
 
 					const response = await axios.post(
-						'http://localhost:4444/auth/oauth',
+						`${process.env.BACKEND_URL}/auth/oauth`,
 						fetchArray
 					)
 
@@ -97,11 +100,14 @@ const options: NextAuthOptions = {
 				session.accessToken = token.access_token
 
 				try {
-					const response = await axios.get('http://localhost:4444/auth/me', {
-						headers: {
-							Authorization: `Bearer ${token.access_token}`,
-						},
-					})
+					const response = await axios.get(
+						`${process.env.BACKEND_URL}/auth/me`,
+						{
+							headers: {
+								Authorization: `Bearer ${token.access_token}`,
+							},
+						}
+					)
 
 					if (response.data.success) {
 						const user = response.data.user
