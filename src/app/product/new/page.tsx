@@ -31,18 +31,20 @@ const schema = yup.object().shape({
 	image: yup
 		.mixed()
 		.required('Image is required')
-		.test(
-			'fileType',
-			'Unsupported File Format',
-			value =>
-				value &&
-				['image/jpeg', 'image/png', 'image/gif'].includes(value[0]?.type)
-		)
-		.test(
-			'fileSize',
-			'File Size is too large',
-			value => value && value[0]?.size <= 5000000
-		), // 5MB
+		.test('fileType', 'Unsupported File Format', value => {
+			if (value && value instanceof FileList && value.length > 0) {
+				const file = value[0]
+				return ['image/jpeg', 'image/png', 'image/gif'].includes(file.type)
+			}
+			return false
+		})
+		.test('fileSize', 'File Size is too large', value => {
+			if (value && value instanceof FileList && value.length > 0) {
+				const file = value[0]
+				return file.size <= 5000000
+			}
+			return false
+		}),
 	brand: yup.string().required('Brand is required'),
 	price: yup
 		.number()
