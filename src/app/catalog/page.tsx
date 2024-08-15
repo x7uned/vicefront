@@ -55,6 +55,14 @@ const sortOptions = [
 ]
 
 const CatalogPage: React.FC = () => {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<CatalogPageContent />
+		</Suspense>
+	)
+}
+
+const CatalogPageContent: React.FC = () => {
 	const searchParams = useSearchParams()
 	const router = useRouter()
 	const dispatch = useAppDispatch()
@@ -208,16 +216,14 @@ const CatalogPage: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<Suspense fallback={<div>Loading products...</div>}>
-				<div className='mt-10 w-full'>
-					<ProductsList
-						products={products}
-						totalPages={totalPages}
-						page={page}
-						handlePageChange={handlePageChange}
-					/>
-				</div>
-			</Suspense>
+			<div className='mt-10 w-full'>
+				<ProductsList
+					products={products}
+					totalPages={totalPages}
+					page={page}
+					handlePageChange={handlePageChange}
+				/>
+			</div>
 		</div>
 	)
 }
